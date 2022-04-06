@@ -1,0 +1,70 @@
+<ion-toolbar>
+    <h3 class="center">Asignar Presupuesto Territorio</h3>
+
+</ion-toolbar>
+
+
+<ion-content>
+
+
+
+    <form id="form" (ngSubmit)="saveBudgetTerritory( f )" #f="ngForm">
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-label>Seleccione Presupuesto</ion-label>
+            <ion-select placeholder="Presupuesto" [(ngModel)]="territory.budget_channel_regional_id" [ngModelOptions]="{standalone: true}">
+                <ion-select-option value="1">1500000</ion-select-option>
+            </ion-select>
+
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-label>Seleccione Canal</ion-label>
+            <ion-select placeholder="Canal" [(ngModel)]="territory.channel_id" [ngModelOptions]="{standalone: true}">
+                <ion-select-option value="1">DEALER</ion-select-option>
+                <ion-select-option value="1">HOME</ion-select-option>
+            </ion-select>
+
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-label>Selecione Regional</ion-label>
+            <ion-select placeholder="Regional" [(ngModel)]="territory.regional_id" [ngModelOptions]="{standalone: true}">
+                <ion-select-option value="1">COSTA</ion-select-option>
+            </ion-select>
+
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-label>Selecione Territorio</ion-label>
+            <ion-select placeholder="Territorio" [(ngModel)]="territory.territory_id" [ngModelOptions]="{standalone: true}">
+                <ion-select-option value="1">MAGDALENA</ion-select-option>
+                <ion-select-option value="2">GUAJIRA</ion-select-option>
+            </ion-select>
+
+        </ion-item>
+
+
+        <div class="ion-margin-bottom">
+
+            <span *ngIf="f.submitted && f.controls['budget'].errors" class="">El presupuesto es obligatorio</span>
+        </div>
+        <ion-item class="ion-margin-bottom">
+
+            <ion-input [(ngModel)]="territory.budget" required type="number" placeholder="Ingrese Presupuesto" name="budget" minlength="4">
+
+            </ion-input>
+
+        </ion-item>
+
+
+        <ion-button expand="block" type="submit" shape="round">Asignar Presupuesto</ion-button>
+
+    </form>
+
+
+</ion-content>

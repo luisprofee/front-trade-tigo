@@ -1,0 +1,56 @@
+<ion-toolbar>
+    <h3 class="center">Crear Plan de Acción</h3>
+
+</ion-toolbar>
+
+
+<ion-content>
+
+
+
+    <form id="form" (ngSubmit)="savePlan( f )" #f="ngForm">
+
+
+        <div class="ion-margin-bottom">
+
+            <span *ngIf="f.submitted && f.controls['description'].errors" class="">la descripcion es obligatoria</span>
+        </div>
+        <ion-item class="ion-margin-bottom">
+
+            <ion-input [(ngModel)]="plan.description" required type="text" placeholder="Descripción" name="description" minlength="4">
+
+            </ion-input>
+
+        </ion-item>
+
+
+        <div class="ion-margin-bottom">
+
+            <span *ngIf="f.submitted && f.controls['objetive'].errors" class="">El objetivo es obligatorio</span>
+        </div>
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-input [(ngModel)]="plan.objetive" required type="text" placeholder="Objetivos" name="objetive" minlength="6">
+            </ion-input>
+
+        </ion-item>
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-label>Seleccione Producto</ion-label>
+            <ion-select placeholder="Selecione Producto" [(ngModel)]="plan.product_id" [ngModelOptions]="{standalone: true}">
+                <ion-select-option value="1">HOME</ion-select-option>
+                <ion-select-option value="2">POSTPAGO</ion-select-option>
+                <ion-select-option value="3">PREPAGO</ion-select-option>
+            </ion-select>
+
+        </ion-item>
+
+        <ion-button expand="block" type="submit" shape="round">Crear plan de acción</ion-button>
+        <br><br><br>
+        <ion-button expand="block" color="warning" routerLink="/view-actions">Listado de acciones</ion-button>
+    </form>
+
+
+</ion-content>

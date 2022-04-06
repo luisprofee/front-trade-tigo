@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title class="center">Plan de aciones</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+
+        <ion-item *ngFor="let plan of planes">
+            <ion-label>{{plan.description}}</ion-label>
+            <ion-badge *ngIf="plan.state == 1" color="tertiary" slot="end" (click)="updateState(plan.id, 0)">Activo</ion-badge>
+            <ion-badge *ngIf="plan.state == 0" color="danger" slot="end" (click)="updateState(plan.id, 1)">Inactivo</ion-badge>
+        </ion-item>
+
+    </ion-list>
+    <br><br>
+    <ion-button expand="block" shape="round" routerLink="/action-plan">Crear plan de acción</ion-button>
+</ion-content>

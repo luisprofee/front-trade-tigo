@@ -1,0 +1,50 @@
+<ion-app>
+    <ion-menu side="start" menuId="first" contentId="main">
+        <ion-content>
+            <div class="menu-header-bg"></div>
+            <div class="header-content">
+                <img src="../assets/images/menu.svg" alt="">
+                <ion-label>
+                    <h2 class="text-long">Plan Operacional</h2>
+                    <p class="text-long">MENU</p>
+                </ion-label>
+            </div>
+            <div class="action-button">
+                <ion-button routerLink="/create-budget-national" (click)="closeMenu()">
+                    <ion-icon name="add-circle"></ion-icon><span class="font-weight-300">Crear Presupuesto</span></ion-button>
+            </div>
+            <ion-list class="menu-items" lines="none">
+
+
+                <ion-item menuClose routerLink="/allocate-regional-budget" (click)="closeMenu()">
+                    <ion-icon name="alert-circle-outline"></ion-icon>Asignar Presupuesto Regional
+                </ion-item>
+
+                <ion-item menuClose routerLink="/view-budget-regionals" (click)="closeMenu()">
+                    <ion-icon name="eye"></ion-icon>Ver Distribución PPTO
+                </ion-item>
+                <ion-item menuClose routerLink="/automatic-budget" (click)="closeMenu()">
+                    <ion-icon name="apps-outline"></ion-icon>Distribución automatica
+                </ion-item>
+                <ion-item menuClose routerLink="create-weight" (click)="closeMenu()">
+                    <ion-icon name="settings-outline"></ion-icon>Configuración de pesos
+                </ion-item>
+                <ion-item menuClose routerLink="/upload-file" (click)="closeMenu()">
+                    <ion-icon name="eye"></ion-icon>Subir Archivo
+                </ion-item>
+
+
+
+
+                <ion-item menuClose routerLink="/login" (click)="closeMenu()">
+                    <ion-icon color="primary" name="exit"></ion-icon>Salir</ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-menu>
+
+
+
+
+
+    <ion-router-outlet id="main"></ion-router-outlet>
+</ion-app>

@@ -1,0 +1,101 @@
+<!--<ion-content>
+
+    <div id="header">
+
+        <img src="assets/icon/login.svg" alt="">
+    </div>
+
+    <form id="form" (ngSubmit)="login( f )" #f="ngForm">
+
+
+        <div class="ion-margin-bottom">
+
+            <span *ngIf="f.submitted && f.controls['email'].errors" class="">el usuario es obligatorio</span>
+        </div>
+        <ion-item class="ion-margin-bottom">
+
+            <ion-input [(ngModel)]="usuario.email" required type="text" placeholder="usuario" name="email" minlength="4">
+
+            </ion-input>
+
+        </ion-item>
+
+
+        <div class="ion-margin-bottom">
+
+            <span *ngIf="f.submitted && f.controls['password'].errors" class="">la contraseña es obligatoria</span>
+        </div>
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-input [(ngModel)]="usuario.password" required type="password" placeholder="password" name="password" minlength="6">
+            </ion-input>
+
+        </ion-item>
+
+        <ion-button expand="block" type="submit" shape="round">Login</ion-button>
+    </form>
+
+</ion-content>-->
+
+<ion-content class="body">
+    <br><br>
+    <ion-grid class="ion-no-padding">
+        <!-- logo -->
+        <ion-row class="header ion-align-items-start ion-align-items-stretch">
+
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="login( f )" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Bienvenido,</strong> inicie sesión en tu cuenta</h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <!-- Input-field-text -->
+
+                                <ion-item>
+                                    <ion-input type="email" name="email" required placeholder="Luis@correo.com" [(ngModel)]="usuario.email"></ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['email'].errors" class="">el usuario es obligatorio</ion-label>
+                                    <!-- <ion-label class="ion-no-margin" *ngIf="!isUsernameValid">Correo no permitido</ion-label> -->
+                                </ion-item>
+                                <!-- Input-field-password -->
+
+
+                                <ion-item>
+                                    <ion-input [type]="hideInputPassword ? 'password' : 'text' " placeholder="Contraseña" name="password" required [(ngModel)]="usuario.password"></ion-input>
+
+                                    <ion-icon class="field-icon" *ngIf="hideInputPassword" name="eye-off" tappable (click)="hideInputPassword = !hideInputPassword"></ion-icon>
+                                    <ion-icon class="field-icon" *ngIf="!hideInputPassword" name="eye" tappable (click)="hideInputPassword = !hideInputPassword"></ion-icon>
+
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['password'].errors">Contraseña Obligatoria</ion-label>
+                                </ion-item>
+                            </div>
+                            <!-- Login button -->
+                            <ion-col size="12" class="ion-no-padding">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Login</button>
+                            </ion-col>
+
+
+                            <!-- Description -->
+                            <div class="description ion-text-center">
+                                <ion-row>
+
+                                    <!-- Signup now button -->
+                                    <ion-col size="12" class="ion-padding" routerLink="/register">
+                                        <p class="ion-no-margin ion-no-padding">¿No tienes una cuenta? <a href="" class="cursorPointer">Regístrate ahora</a> </p>
+                                    </ion-col>
+                                </ion-row>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </form>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

@@ -1,0 +1,345 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button color="light" menu="first"></ion-menu-button>
+        </ion-buttons>
+        <ion-title color="light" class="center">Configuración de pesos </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-grid class="ion-no-padding">
+        <ion-row class="header ion-align-items-start ion-align-items-stretch">
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Plan Operacional,</strong>¿Que quieres ver?</h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-select placeholder="Selecione Una Opción" name="option" (ionChange)="option($event)">
+                                        <ion-select-option class=" sc-ion-alert-md-h" value="1" text-wrap>Vertical</ion-select-option>
+                                        <ion-select-option class=" sc-ion-alert-md-h" value="2" text-wrap>Canal</ion-select-option>
+                                        <ion-select-option class=" sc-ion-alert-md-h" value="3" text-wrap>Regional</ion-select-option>
+                                    </ion-select>
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['country_id'].errors" class="">selecione un pais</ion-label>-->
+                                    <!-- <ion-label class="ion-no-margin" *ngIf="!isUsernameValid">Correo no permitido</ion-label> -->
+                                </ion-item>
+
+
+
+                            </div>
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="options.regional">
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="updateRegional()" #f="ngForm" *ngIf="options.Uregional">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Editar Peso de la Regional,</strong></h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="regionals[indexRegionalSelected].name" required type="text" placeholder="ingrese el nombre vertical" name="name" minlength="4" disabled>
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['name'].errors" class="">Ingrese un nombre</ion-label>
+
+                                </ion-item>
+
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="regionals[indexRegionalSelected].weight" (ionChange)="validatePesoRegional()" required type="number" placeholder="ingrese el peso" name="weight" minlength="4">
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['weight'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+
+                            </div>
+
+                            <ion-col size="12" class="ion-no-padding" *ngIf="buttons.regional">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Editar peso de la Regional</button>
+                            </ion-col>
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+                <br>
+                <form padding id="form" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Seleccione una Vertical</strong></h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-select placeholder="Selecione Una Vertical" name="option" (ionChange)="selectVertical($event)">
+                                        <ion-select-option *ngFor="let vertical of verticals" class=" sc-ion-alert-md-h" value="{{vertical.id}}" text-wrap>{{vertical.name}}</ion-select-option>
+
+                                    </ion-select>
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['country_id'].errors" class="">selecione un pais</ion-label>-->
+                                    <!-- <ion-label class="ion-no-margin" *ngIf="!isUsernameValid">Correo no permitido</ion-label> -->
+                                </ion-item>
+
+
+
+                            </div>
+
+                        </ion-col>
+                    </ion-row>
+                    <br>
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-select placeholder="Selecione Una Canal" name="option" (ionChange)="selectChannel($event)">
+                                        <ion-select-option *ngFor="let channel of channels" class=" sc-ion-alert-md-h" value="{{channel.id}}" text-wrap>{{channel.name}}</ion-select-option>
+
+                                    </ion-select>
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['country_id'].errors" class="">selecione un pais</ion-label>-->
+                                    <!-- <ion-label class="ion-no-margin" *ngIf="!isUsernameValid">Correo no permitido</ion-label> -->
+                                </ion-item>
+
+
+
+                            </div>
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+
+                <ion-list class="center" *ngIf="options.dataRegional">
+
+                    <ion-item>
+                        <ion-label>Ocupacion de pesos de las regionales</ion-label>
+                        <ion-badge slot="end" *ngIf="acu_regional > 99">{{acu_regional}}%</ion-badge>
+                        <ion-badge slot="end" color="danger" *ngIf="acu_regional < 100">{{acu_regional}}%</ion-badge>
+                    </ion-item>
+                </ion-list>
+
+                <br>
+                <div class="input-field" *ngIf="options.dataRegional">
+                    <!-- Input-field-text -->
+                    <ion-list>
+                        <ion-item *ngFor="let regional of regionals">
+                            <ion-avatar slot="start">
+                                <img src="./assets/images/menu.svg">
+                            </ion-avatar>
+                            <ion-label>
+                                <h2><span>Canal: </span>{{regional.name}}</h2>
+                                <h3> <span>Peso: </span>{{regional.weight}}%</h3>
+
+
+                            </ion-label>
+                            <ion-item>
+                                <ion-label>
+                                    <ion-badge color="tertiary" (click)="selectedRegional(regional.id)">Editar</ion-badge>
+                                </ion-label>
+                            </ion-item>
+                        </ion-item>
+                    </ion-list>
+
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="options.channel">
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="updateChannel()" #f="ngForm" *ngIf="options.Uchannel">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Editar Peso del Canal,</strong></h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="channels[indexChannelSelected].name" required type="text" placeholder="ingrese el nombre vertical" name="name" minlength="4" disabled>
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['name'].errors" class="">Ingrese un nombre</ion-label>
+
+                                </ion-item>
+
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="channels[indexChannelSelected].weight" (ionChange)="validatePesoChannel()" required type="number" placeholder="ingrese el peso" name="weight" minlength="4">
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['weight'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+
+                            </div>
+
+                            <ion-col size="12" class="ion-no-padding" *ngIf="buttons.canal">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Editar peso del Canal</button>
+                            </ion-col>
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+                <form padding id="form" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Elige una Vertical,</strong></h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-select placeholder="Selecione Una Vertical" name="option" (ionChange)="getChannel($event)">
+                                        <ion-select-option *ngFor="let vertical of verticals" class=" sc-ion-alert-md-h" value="{{vertical.id}}" text-wrap>{{vertical.name}}</ion-select-option>
+
+                                    </ion-select>
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['country_id'].errors" class="">selecione un pais</ion-label>-->
+                                    <!-- <ion-label class="ion-no-margin" *ngIf="!isUsernameValid">Correo no permitido</ion-label> -->
+                                </ion-item>
+
+
+
+                            </div>
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+
+                <ion-list class="center" *ngIf="options.dataChannel">
+
+                    <ion-item>
+                        <ion-label>Ocupación de pesos de los canales de la vertical seleccionada</ion-label>
+                        <ion-badge slot="end">100%</ion-badge>
+                    </ion-item>
+                </ion-list>
+
+                <br>
+                <div class="input-field" *ngIf="options.dataChannel">
+                    <!-- Input-field-text -->
+                    <ion-list>
+                        <ion-item *ngFor="let channel of channels">
+                            <ion-avatar slot="start">
+                                <img src="./assets/images/menu.svg">
+                            </ion-avatar>
+                            <ion-label>
+                                <h2><span>Canal: </span>{{channel.name}}</h2>
+                                <h3> <span>Peso: </span>{{channel.weight}}%</h3>
+
+
+                            </ion-label>
+                            <ion-item>
+                                <ion-label>
+                                    <ion-badge color="tertiary" (click)="selectedChannel(channel.id)">Editar</ion-badge>
+                                </ion-label>
+                            </ion-item>
+                        </ion-item>
+                    </ion-list>
+
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="options.vertical">
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="updateVertical()" #f="ngForm" *ngIf="options.Uvertical">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Editar Peso Vertical,</strong></h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="verticals[indexVerticalSelected].name" required type="text" placeholder="ingrese el nombre vertical" name="name" minlength="4" disabled>
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['name'].errors" class="">Ingrese un nombre</ion-label>
+
+                                </ion-item>
+
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="verticals[indexVerticalSelected].weight" (ionChange)="validatePesoVerticar()" required type="number" placeholder="ingrese el peso" name="weight" minlength="4">
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['weight'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+
+                            </div>
+
+                            <ion-col size="12" class="ion-no-padding" *ngIf="buttons.vertical">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Editar peso Vertical</button>
+                            </ion-col>
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+                <br>
+                <ion-list class="center">
+
+                    <ion-item>
+                        <ion-label>Ocupacion de pesos de Verticales</ion-label>
+                        <ion-badge slot="end">{{acu_vertical}}%</ion-badge>
+                    </ion-item>
+                </ion-list>
+                <br>
+                <div class="input-field">
+                    <!-- Input-field-text -->
+                    <ion-list>
+                        <ion-item *ngFor="let vertical of verticals">
+                            <ion-avatar slot="start">
+                                <img src="./assets/images/menu.svg">
+                            </ion-avatar>
+                            <ion-label>
+                                <h2><span>Vertical: </span>{{vertical.name}}</h2>
+                                <h3> <span>Peso: </span>{{vertical.weight}}%</h3>
+
+
+                            </ion-label>
+                            <ion-item>
+                                <ion-label>
+                                    <ion-badge color="tertiary" (click)="selectedVertical(vertical.id)">Editar</ion-badge>
+                                </ion-label>
+                            </ion-item>
+                        </ion-item>
+                    </ion-list>
+
+                </div>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
+
+</ion-content>

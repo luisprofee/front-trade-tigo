@@ -1,0 +1,46 @@
+<ion-toolbar>
+    <h3 class="center">Clase de Presupuesto</h3>
+
+</ion-toolbar>
+
+
+<ion-content>
+
+
+
+    <form id="form" (ngSubmit)="saveTypeBudget( f )" #f="ngForm">
+
+
+        <div class="ion-margin-bottom">
+
+            <span *ngIf="f.submitted && f.controls['name'].errors" class="">el nombre es obligatoria</span>
+        </div>
+        <ion-item class="ion-margin-bottom">
+
+            <ion-input [(ngModel)]="type.name" required type="text" placeholder="Nombre" name="name" minlength="4">
+
+            </ion-input>
+
+        </ion-item>
+
+
+        <div class="ion-margin-bottom">
+
+            <span *ngIf="f.submitted && f.controls['descripcion'].errors" class="">La descripción es obligatoria</span>
+        </div>
+
+        <ion-item class="ion-margin-bottom">
+
+            <ion-input [(ngModel)]="type.description" required type="text" placeholder="descripción" name="descripcion" minlength="6">
+            </ion-input>
+
+        </ion-item>
+
+
+        <ion-button expand="block" type="submit" shape="round">Crear Tipo de presupuesto</ion-button>
+        <br><br><br>
+        <ion-button expand="block" color="warning" routerLink="/type-budget">Tipos de Presupestos</ion-button>
+    </form>
+
+
+</ion-content>

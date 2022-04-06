@@ -1,0 +1,242 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button color="light" menu="first"></ion-menu-button>
+        </ion-buttons>
+        <ion-title color="light" class="center">Distribución Regional</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content class="body" [scrollEvents]="true">
+
+    <br><br>
+    <ion-grid class="ion-no-padding">
+
+        <!-- logo -->
+        <ion-row class="header ion-align-items-start ion-align-items-stretch">
+
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <ion-card class="borderradius" *ngIf="information.budget > 0">
+                    <ion-card-header>
+
+
+                        <ion-chip class="derechactivo">
+                            <ion-label><i>Modificar</i></ion-label>
+                        </ion-chip>
+                        <ion-item class="cardHeader">
+                            <ion-avatar slot="start">
+                                <img class="avatar" src="./assets/images/menu.svg">
+                            </ion-avatar>
+                            <ion-label>
+                                <h3 class="text-name"><span>Presupuesto :</span> {{formatterPeso.format(information.budget)}}</h3>
+                                <h3 class="text-name"><span>Distribuido :</span> {{formatterPeso.format(information.ejecution)}}</h3>
+                                <h3 class="text-name"><span>Restante :</span> {{formatterPeso.format(information.budget - information.ejecution)}}</h3>
+
+                            </ion-label>
+                        </ion-item>
+                    </ion-card-header>
+
+
+
+                    <ion-card-content>
+                        <ion-row>
+                            <ion-col size="10">
+                                <ion-list>
+                                    <ion-list-header>
+                                        <ion-label>Distribución al {{information.ejecution/information.budget *100 | number: '1.0-0' }}%</ion-label>
+                                    </ion-list-header>
+                                    <ion-progress-bar value="0.{{information.ejecution/information.budget *100 | number: '1.0-0' }}"> </ion-progress-bar>
+                                </ion-list>
+                            </ion-col>
+
+                        </ion-row>
+                    </ion-card-content>
+                </ion-card>
+                <form padding id="form" (ngSubmit)="saveBudgetRegional( f )" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Regional Canal</strong></h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div id="inicio" class="input-field">
+                                <!-- Input-field-text -->
+
+                                <ion-item>
+
+                                    <ion-select placeholder="Selecione PPTO" interface="action-sheet" name="budget_id" (ionChange)="getOption($event,1)" [(ngModel)]="budgetRegional.budget_id" [ngModelOptions]="{standalone: true}">
+                                        <ion-select-option class=" sc-ion-alert-md-h" *ngFor="let budget of budgets" [value]="budget.id" text-wrap>{{formatterPeso.format(budget.value)}} - {{budget.objetive}}</ion-select-option>
+                                    </ion-select>
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['country_id'].errors" class="">selecione un pais</ion-label>-->
+                                    <!-- <ion-label class="ion-no-margin" *ngIf="!isUsernameValid">Correo no permitido</ion-label> -->
+                                </ion-item>
+                                <!-- Input-field-password -->
+
+                                <ion-item>
+
+                                    <ion-select placeholder="Regionales" (ionChange)="getOption($event,2)" [(ngModel)]="budgetRegional.regional_id" [ngModelOptions]="{standalone: true}">
+                                        <ion-select-option class="sc-ion-alert-md-h" *ngFor="let regional of regionals" [value]="regional.id">{{regional.name}}</ion-select-option>
+
+                                    </ion-select>
+
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['country_id'].errors" class="">selecione plan de accion</ion-label>-->
+
+                                </ion-item>
+
+                                <ion-item>
+
+                                    <ion-select placeholder="Canales" name="channel_id" (ionChange)="getOption($event,3)" [(ngModel)]="budgetRegional.channel_id" [ngModelOptions]="{standalone: true}">
+                                        <ion-select-option *ngFor="let channel of channels " [value]="channel.id">{{channel.name}}</ion-select-option>
+
+                                    </ion-select>
+
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['budget_type_id'].errors" class="">selecione una clase</ion-label>-->
+                                </ion-item>
+
+
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="budgetRegional.PPTO" (ionChange)="validarBudget($event)" required type="number" placeholder="Ingrese Presupuesto" name="presupuesto" minlength="4">
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['presupuesto'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+
+
+                            </div>
+                            <!-- Login button -->
+                            <ion-col size="12" class="ion-no-padding">
+                                <button class="btnFull ion-no-margin" *ngIf="option.state == 0" type="submit" shape="round">Asignar Presupuesto</button>
+                            </ion-col>
+
+                            <!-- Description -->
+                            <div class="description ion-text-center">
+                                <ion-row>
+
+
+                                </ion-row>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </form>
+
+                <div class="input-field">
+                    <ion-col size="12" class="ion-no-padding">
+                        <ion-button class="btnFull ion-no-margin" expand="block" *ngIf="option.state == 1" (click)="saveModification()" shape="round">Editar Presupuesto</ion-button>
+                    </ion-col>
+                    <br>
+                    <ion-col size="12" class="ion-no-padding">
+                        <ion-button class="btnFull ion-no-margin" color="warning" expand="block" *ngIf="option.state == 1" (click)="cancel()" shape="round">Cancelar</ion-button>
+                    </ion-col>
+                </div>
+
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="items.length > 0" class="header ion-align-items-start ion-align-items-stretch">
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+
+                <ion-row class="ion-align-items-start">
+                    <ion-col size="12">
+                        <h1 style="color: #3D3B3B;"><strong class="text-logo"></strong> Distribución de Presupuesto</h1>
+                    </ion-col>
+                </ion-row>
+                <!-- Input-field -->
+                <ion-row>
+                    <ion-col size="12">
+                        <div class="input-field">
+                            <!-- Input-field-text -->
+                            <ion-list>
+                                <ion-item *ngFor="let item of items">
+                                    <ion-avatar slot="start">
+                                        <img src="./assets/images/menu.svg">
+                                    </ion-avatar>
+                                    <ion-label>
+                                        <h2><span>Regional: </span>{{item.regional.name}}</h2>
+                                        <h3> <span>Canal: </span>{{item.channel.name}}</h3>
+                                        <h3> <span>PPTO nacional: </span>{{formatterPeso.format(item.budget.value)}}</h3>
+                                        <h3> <span>PPTO Regional: </span>{{formatterPeso.format(item.PPTO)}}</h3>
+
+                                    </ion-label>
+                                    <ion-item>
+                                        <ion-label>
+                                            <ion-badge color="tertiary" (click)="scrollToTop(item.id)">Editar</ion-badge>
+                                        </ion-label>
+                                    </ion-item>
+                                </ion-item>
+                            </ion-list>
+
+                        </div>
+                        <!-- Login button -->
+
+
+
+                        <!-- Description -->
+                        <div class="description ion-text-center">
+                            <ion-row>
+
+                                <!-- Signup now button -->
+                                <ion-col size="12" class="ion-padding" routerLink="/register">
+                                    <p class="ion-no-margin ion-no-padding">¿No sabes que hacer? <a href="" class="cursorPointer">Mira aquí los PPTO</a> </p>
+                                </ion-col>
+                            </ion-row>
+                        </div>
+                    </ion-col>
+                </ion-row>
+
+
+
+            </ion-col>
+        </ion-row>
+        <ion-row *ngIf="items.length == 0" class="header ion-align-items-start ion-align-items-stretch">
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+
+                <ion-row class="ion-align-items-start">
+                    <ion-col size="12">
+                        <h1 style="color: #3D3B3B;"><strong class="text-logo"></strong> Distribución de Presupuesto</h1>
+                    </ion-col>
+                </ion-row>
+                <!-- Input-field -->
+                <ion-row>
+                    <ion-col size="12">
+
+                        <!-- Login button -->
+
+
+
+                        <!-- Description -->
+                        <div class="description ion-text-center">
+                            <ion-row>
+
+                                <!-- Signup now button -->
+                                <ion-col size="12" class="ion-padding" routerLink="/register">
+                                    <p class="ion-no-margin ion-no-padding">Aun no se ingresa presupuesto en esta opción
+                                        <a href="" class="cursorPointer"></a>
+                                    </p>
+                                </ion-col>
+                            </ion-row>
+                        </div>
+                    </ion-col>
+                </ion-row>
+
+
+
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid class="ion-no-padding">
+        <!-- logo -->
+
+    </ion-grid>
+</ion-content>

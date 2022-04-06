@@ -1,0 +1,363 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button color="light" menu="first"></ion-menu-button>
+        </ion-buttons>
+        <ion-title color="light" class="center">Distribución Automatica del Presupuesto Nacional</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="body">
+
+    <br><br>
+    <ion-grid class="ion-no-padding">
+        <!-- logo -->
+        <ion-row class="header ion-align-items-start ion-align-items-stretch">
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="automatic()" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Plan Operacional,</strong> Seleccione Presupuesto</h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <!-- Input-field-text -->
+
+
+                                <!-- Input-field-password -->
+
+
+                                <ion-item>
+
+                                    <ion-select placeholder="Selecione PPTO" interface="action-sheet" name="budget_id" [(ngModel)]="option.budget_id" [ngModelOptions]="{standalone: true}">
+                                        <ion-select-option class=" sc-ion-alert-md-h" *ngFor="let budget of budgets" [value]="budget.id" text-wrap>{{formatterPeso.format(budget.value)}} - {{budget.objetive}}</ion-select-option>
+                                    </ion-select>
+                                    <!--<ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['country_id'].errors" class="">selecione un pais</ion-label>-->
+                                    <!-- <ion-label class="ion-no-margin" *ngIf="!isUsernameValid">Correo no permitido</ion-label> -->
+                                </ion-item>
+
+
+
+                            </div>
+                            <!-- Login button -->
+                            <ion-col size="12" class="ion-no-padding">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Ver como queda</button>
+                            </ion-col>
+
+
+                            <!-- Description -->
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+            </ion-col>
+        </ion-row>
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="verticals.length > 0">
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <ion-list class="center">
+
+                    <ion-item>
+                        <ion-label>Distribución de los pesos de las Verticales</ion-label>
+                        <ion-badge slot="end" *ngIf="pesosAcumulado.vertical > 99">{{pesosAcumulado.vertical}}%</ion-badge>
+                        <ion-badge slot="end" color="danger" *ngIf="pesosAcumulado.vertical < 100">{{pesosAcumulado.vertical}}%</ion-badge>
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+
+
+
+
+        <div class="center" *ngIf="verticals.length > 0">
+
+            <ion-chip outline color="primary" *ngFor="let vertical of verticals">
+                <ion-icon name="eye-outline" (click)="getBudgetChannelRegional(vertical.id, vertical.distribucion)"></ion-icon>
+                <ion-label>{{vertical.name}}-{{formatterPeso.format(vertical.distribucion)}}-({{vertical.weight}}%)</ion-label>
+                <ion-icon name="cog" (click)="updateVertical(vertical.id, vertical.name, vertical.weight)"></ion-icon>
+            </ion-chip>
+
+        </div>
+
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="option.edit_vertical == 1">
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="saveUpdateVertical( f )" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Editar Vertical,</strong> Ingrese el Peso</h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <!-- Input-field-text -->
+
+
+                                <!-- Input-field-password -->
+
+
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="verticals[indexVerticalSelected].name" required type="text" name="Vertical" minlength="4" disabled>
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['presupuesto'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="verticals[indexVerticalSelected].weight" (ionChange)="validationVertical($event)" required type="number" placeholder="ingrese el peso" name="peso" minlength="4">
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['presupuesto'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+
+
+
+                            </div>
+                            <!-- Login button -->
+                            <ion-col size="12" class="ion-no-padding" *ngIf="button.vertical == 1">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Editar Peso</button>
+                            </ion-col>
+
+
+
+                            <!-- Description -->
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+                <br>
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-button class="btnFull ion-no-margin" color="warning" expand="block" (click)="cancel(1)">Cancelar</ion-button>
+                </ion-col>
+            </ion-col>
+        </ion-row>
+        <br>
+
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="channels.length > 0">
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <ion-list class="center">
+
+                    <ion-item>
+                        <ion-label>Distribución de los pesos de los Canales</ion-label>
+                        <ion-badge slot="end" *ngIf="pesosAcumulado.channel > 99">{{pesosAcumulado.channel}}%</ion-badge>
+
+
+
+                    </ion-item>
+                </ion-list>
+            </ion-col>
+        </ion-row>
+        <div class="center">
+
+            <ion-chip outline color="secondary" *ngFor="let channel of channels">
+                <ion-icon name="eye-outline" (click)="getBudgetRegional(channel.channel_id, channel.asignado)"></ion-icon>
+                <ion-label>{{channel.channel}}-{{formatterPeso.format(channel.asignado)}}</ion-label>
+                <ion-icon name="cog" (click)="updateChanel(channel.id)"></ion-icon>
+            </ion-chip>
+        </div>
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="option.edit_channel == 1">
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="saveUpdateChannel( f )" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Editar Canal,</strong> Ingrese el Peso</h1>
+                        </ion-col>
+                    </ion-row>
+                    <!-- Input-field -->
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <!-- Input-field-text -->
+
+
+                                <!-- Input-field-password -->
+
+
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="channels[indexChannelSelected].channel" required type="text" name="Channel" minlength="4" disabled>
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['presupuesto'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="channels[indexChannelSelected].peso" (ionChange)="validationChannel($event)" required type="number" placeholder="ingrese el peso" name="peso" minlength="4">
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['presupuesto'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+
+
+
+                            </div>
+                            <!-- Login button -->
+                            <ion-col size="12" class="ion-no-padding" *ngIf="button.channel == 1">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Editar Peso</button>
+                            </ion-col>
+
+
+
+                            <!-- Description -->
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+                <br>
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-button class="btnFull ion-no-margin" color="warning" expand="block" (click)="cancel(2)">Cancelar</ion-button>
+                </ion-col>
+            </ion-col>
+        </ion-row>
+
+
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="items.length > 0">
+
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+
+                <ion-card class="borderradius center">
+                    <ion-card-header>
+
+
+                        <ion-chip class="derechactivo">
+                            <ion-label><i>Configurar Pesos</i></ion-label>
+                            <ion-icon name="cog" style="color: black;"></ion-icon>
+                        </ion-chip>
+                        <ion-item class="cardHeader">
+                            <ion-avatar slot="start">
+                                <img class="avatar" src="./assets/images/menu.svg">
+                            </ion-avatar>
+                            <ion-label>
+                                <h3 class="text-name"><span>Presupuesto :</span> {{formatterPeso.format(budgetTemp.vertical)}}</h3>
+                                <h3 class="text-name"><span>Distribuido :</span> {{formatterPeso.format(budgetTemp.acumulado)}}</h3>
+                                <h3 class="text-name"><span>Restante :</span> {{formatterPeso.format(budgetTemp.vertical - budgetTemp.acumulado)}}</h3>
+
+                            </ion-label>
+                        </ion-item>
+                    </ion-card-header>
+
+
+
+                    <ion-card-content>
+                        <ion-row>
+                            <ion-col size="10">
+                                <ion-list>
+                                    <ion-list-header>
+                                        <ion-label>Distrubición al {{budgetTemp.acumulado / budgetTemp.vertical * 100 }}%</ion-label>
+                                    </ion-list-header>
+                                    <ion-progress-bar *ngIf="budgetTemp.acumulado / budgetTemp.vertical * 100 == 100" value="{{budgetTemp.acumulado / budgetTemp.vertical * 100 }}"> </ion-progress-bar>
+                                    <ion-progress-bar *ngIf="budgetTemp.acumulado / budgetTemp.vertical * 100 != 100" value="0.{{budgetTemp.acumulado / budgetTemp.vertical * 100 }}"> </ion-progress-bar>
+                                </ion-list>
+                            </ion-col>
+
+                        </ion-row>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+
+        <div class="center" id="main-container" *ngIf="items.length > 0">
+            <table>
+                <thead class="text">
+                    <th>Vertical</th>
+                    <th>Regional</th>
+                    <th>Canal</th>
+                    <th>Presupuesto</th>
+                    <th>Peso</th>
+                    <th>Editar</th>
+                </thead>
+                <tr *ngFor="let item of items">
+                    <td>{{item.vertical}}</td>
+                    <td>{{item.regional}}</td>
+                    <td>{{item.channel}}</td>
+                    <td>{{formatterPeso.format(item.asignado)}}</td>
+                    <td>{{item.peso}}%</td>
+                    <td>
+                        <ion-icon name="create-outline" (click)="updateRegional(item.id)"></ion-icon>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+
+        <ion-row class="header ion-align-items-start ion-align-items-stretch" *ngIf="option.edit_regional == 1">
+
+            <!-- Section form>-->
+            <ion-col size="10" offset="1" size-md="6" offset-md="3">
+                <form padding id="form" (ngSubmit)="saveUpdateRegional( f )" #f="ngForm">
+                    <ion-row class="ion-align-items-start">
+                        <ion-col size="12">
+                            <h1 style="color: #3D3B3B;"><strong class="text-logo">Editar Regional,</strong> Ingrese el Peso</h1>
+                        </ion-col>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-col size="12">
+                            <div class="input-field">
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="items[indexRegionalSelected].regional" required type="text" name="Channel" minlength="4" disabled>
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['presupuesto'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+                                <ion-item>
+
+                                    <ion-input [(ngModel)]="items[indexRegionalSelected].peso" (ionChange)="validationRegional($event)" required type="number" placeholder="ingrese el peso" name="peso" minlength="4">
+
+                                    </ion-input>
+                                    <ion-label class="ion-no-margin" *ngIf="f.submitted && f.controls['presupuesto'].errors" class="">Ingrese un valor</ion-label>
+
+                                </ion-item>
+
+                            </div>
+                            <!-- Login button -->
+                            <ion-col size="12" class="ion-no-padding" *ngIf="button.regional == 1">
+                                <button class="btnFull ion-no-margin" type="submit" shape="round">Editar Peso</button>
+                            </ion-col>
+
+
+
+                            <!-- Description -->
+
+                        </ion-col>
+                    </ion-row>
+                </form>
+                <br>
+                <ion-col size="12" class="ion-no-padding">
+                    <ion-button class="btnFull ion-no-margin" color="warning" expand="block" (click)="cancel(3)">Cancelar</ion-button>
+                </ion-col>
+            </ion-col>
+        </ion-row>
+
+    </ion-grid>
+
+    <ion-grid class="ion-text-center">
+
+    </ion-grid>
+
+
+</ion-content>

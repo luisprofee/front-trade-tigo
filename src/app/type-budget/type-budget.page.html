@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title class="center">Tipo de Presupuestos</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+
+        <ion-item *ngFor="let budget of budgets">
+            <ion-label>{{budget.description}}</ion-label>
+            <ion-badge *ngIf="budget.state == 1" color="tertiary" slot="end" (click)="updateState(budget.id, 0)">Activo</ion-badge>
+            <ion-badge *ngIf="budget.state == 0" color="danger" slot="end" (click)="updateState(budget.id, 1)">Inactivo</ion-badge>
+        </ion-item>
+
+    </ion-list>
+    <br><br>
+    <ion-button expand="block" shape="round" routerLink="/create-type-budget">Crear Typo de presupuesto</ion-button>
+</ion-content>
